@@ -13,12 +13,12 @@ let client = new MongoClient(uri, { useNewUrlParser: true });
 
 // Get
 app.get('/', (req, res) => {
-    res.send('<a href="/products">Products</a>');
+    res.send('<a href="/foods">Foods</a>');
 });
-app.get('/products', (req, res) => {
+app.get('/foods', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("onlineStore").collection("products");
+        const collection = client.db("onlineStore").collection("foods");
         collection.find().toArray((err, documents) => {
             if (err) {
                 console.log(err);
@@ -31,12 +31,12 @@ app.get('/products', (req, res) => {
     });
 });
 
-app.get('/product/:key', (req, res) => {
+app.get('/food/:key', (req, res) => {
     const key = req.params.key;
 
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("onlineStore").collection("products");
+        const collection = client.db("onlineStore").collection("foods");
         collection.find({ key }).toArray((err, documents) => {
             if (err) {
                 console.log(err);
@@ -50,14 +50,14 @@ app.get('/product/:key', (req, res) => {
 });
 
 // Post
-app.post('/getProductsByKey', (req, res) => {
+app.post('/getFoodsByKey', (req, res) => {
     const key = req.params.key;
-    const productKeys = req.body;
+    const foodKeys = req.body;
 
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("onlineStore").collection("products");
-        collection.find({ key: { $in: productKeys } }).toArray((err, documents) => {
+        const collection = client.db("onlineStore").collection("foods");
+        collection.find({ key: { $in: foodKeys } }).toArray((err, documents) => {
             if (err) {
                 console.log(err);
                 res.status(500).send({ message: err });
@@ -69,13 +69,13 @@ app.post('/getProductsByKey', (req, res) => {
     });
 });
 
-app.post('/addProduct', (req, res) => {
-    const product = req.body;
+app.post('/addFood', (req, res) => {
+    const food = req.body;
 
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("onlineStore").collection("products");
-        collection.insert(product, (err, result) => {
+        const collection = client.db("onlineStore").collection("foods");
+        collection.insert(food, (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(500).send({ message: err });

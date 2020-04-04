@@ -11,58 +11,58 @@
 
     <body>
         <h1>My node mongo database website</h1>
-        <p>Product name: <span id="productName"></span></p>
+        <p>Food name: <span id="foodName"></span></p>
 
         <div class="container">
             <div class="row">
-                <input type="text" class="form-control" id="name" placeholder="Product name" /><br /><br />
-                <input type="text" class="form-control" id="price" placeholder="Product price" /><br /><br />
-                <input type="text" class="form-control" id="stock" placeholder="Product stock" /><br /><br />
-                <button class="btn btn-primary" id="addProduct">Add Product</button>
+                <input type="text" class="form-control" id="name" placeholder="Food name" /><br /><br />
+                <input type="text" class="form-control" id="price" placeholder="Food price" /><br /><br />
+                <input type="text" class="form-control" id="stock" placeholder="Food stock" /><br /><br />
+                <button class="btn btn-primary" id="addFood">Add Food</button>
             </div>
 
-            <small id="successMsg" style="color: green; display: none;">Product added successfully</small>
+            <small id="successMsg" style="color: green; display: none;">Food added successfully</small>
         </div>
 
-        <ul id="productList">
+        <ul id="foodList">
 
         </ul>
 
         <script>
-            fetch('http://localhost:8080/products').then(res => res.json()).then(data => {
-                displayProducts(data);
+            fetch('http://localhost:8080/foods').then(res => res.json()).then(data => {
+                displayFoods(data);
             });
 
-            function displayProducts(data) {
-                const productList = document.getElementById('productList');
+            function displayFoods(data) {
+                const foodList = document.getElementById('foodList');
                 for (let i = 0; i < data.length; i++) {
-                    const product = data[i];
-                    appendProduct(product, productList);
+                    const food = data[i];
+                    appendFood(food, foodList);
                 }
             }
-            function appendProduct(product, productList) {
+            function appendFood(food, foodList) {
                 const item = document.createElement('li');
-                item.innerHTML = `Name: ${product.name}. Price: $${product.price}. Available: ${product.stock}`;
-                productList.appendChild(item);
+                item.innerHTML = `Name: ${food.name}. Price: $${food.price}. Available: ${food.stock}`;
+                foodList.appendChild(item);
             }
 
             // Post data to the server
-            const btnAddProduct = document.getElementById('addProduct');
-            btnAddProduct.addEventListener('click', () => {
+            const btnAddFood = document.getElementById('addFood');
+            btnAddFood.addEventListener('click', () => {
                 const name = document.getElementById('name').value;
                 const price = document.getElementById('price').value;
                 const stock = document.getElementById('stock').value;
-                const product = { name, price, stock }
+                const food = { name, price, stock }
 
                 // post
-                fetch('http://localhost:8080/addProduct', {
+                fetch('http://localhost:8080/addFood', {
                     method: 'POST',
-                    body: JSON.stringify(product),
+                    body: JSON.stringify(food),
                     headers: {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 }).then(res => res.json()).then(data => {
-                    updateProduct(data);
+                    updateFood(data);
 
                     // Clean input
                     document.getElementById('name').value = '';
@@ -77,11 +77,11 @@
                     }, 3000);
                 });
 
-                const updateProduct = product => {
-                    const productList = document.getElementById('productList');
-                    appendProduct(product, productList);
+                const updateFood = food => {
+                    const foodList = document.getElementById('foodList');
+                    appendFood(food, foodList);
 
-                    document.getElementById('productName').innerText = product.name;
+                    document.getElementById('foodName').innerText = food.name;
                 }
             });
         </script>
